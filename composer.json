@@ -1,0 +1,29 @@
+{
+    "name": "fmihel/php-cache",
+    "description": "php,cache",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^8.5",
+        "fmihel/console-log": "^1.4"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "fmihel\\cache\\": "source/"
+        }
+    },
+    "authors": [
+        {
+            "name": "fmihel",
+            "email": "fmihel76@gmail.com"
+        }
+    ],
+    "require": {
+        "fmihel/php-base": "^1.0"
+    }, 
+    "scripts": {
+        "test": "phpunit --bootstrap vendor/autoload.php tests",
+        "testdox": "phpunit --testdox tests"
+
+    }
+}
