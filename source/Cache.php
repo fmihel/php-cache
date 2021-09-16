@@ -5,7 +5,7 @@ class Cache {
     private $_driver=null;
     private $_enable = true;
     private $_preload = [];
-    static private $_cache = null;
+    static private $_caches = [];
     /**
      * Создание экземпляра
      * @param string $_driver драйвер кеша
@@ -133,10 +133,14 @@ class Cache {
     }
 
     /** получение  статического объекта кэша ( объект будет создан на момент первого вызова )*/
-    static public function obj($driver=null){
-        if (self::$_cache === null)
-            self::$_cache=new Cache($driver);
-        return self::$_cache;
+    static public function obj(string $name='common',$driver=false){
+        if (!isset(self::$_caches[$name]))
+            self::$_caches[$name] = new Cache();
+        
+        if ($driver!==false)
+            self::$_caches[$name]->driver($driver);
+        
+        return self::$_caches[$name];
     }
 }
 

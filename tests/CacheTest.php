@@ -49,7 +49,39 @@ final class CacheTest extends TestCase{
         $res = Cache::obj()->get($this->key); 
         self::assertFalse($res);
         
-    }    
+    }
+    
+    public function test_caches(){
+        
+        $cache = Cache::obj();
+        $cache1 = Cache::obj('other');
+        $key = 'test_caches';
+        $data = 'qgedhqweh qwedgqhwg';
+
+        $res = $cache1->get($key); 
+        self::assertFalse($res);
+        
+        $cache->set($key,$data); 
+        
+        $res = $cache1->get($key); 
+        self::assertFalse($res);
+        
+        $res = $cache->get($key); 
+        self::assertSame($res,$data);
+    }
+
+    public function test_false(){
+        
+        $cache = Cache::obj();
+        $key = 'test';
+        $data = false;
+
+        $res = $cache->set($key,$data); 
+        $res = $cache->get($key); 
+        self::assertSame($res,$data);
+        
+    }
+    
 
 };
 
