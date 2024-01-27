@@ -3,8 +3,8 @@
     "description": "php,cache",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^8.5",
-        "fmihel/console-log": "^1.4"
+        "fmihel/console-log": "^1.4",
+        "phpunit/phpunit": "^8.0"
     },
     "license": "MIT",
     "autoload": {
@@ -18,9 +18,6 @@
             "email": "fmihel76@gmail.com"
         }
     ],
-    "require": {
-        "fmihel/php-base": "^1.0"
-    }, 
     "scripts": {
         "test": "phpunit --bootstrap vendor/autoload.php tests",
         "testdox": "phpunit --testdox tests"
