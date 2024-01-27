@@ -4,8 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ad6c862fab6d4a751d3e1389a5eab52",
-    "packages": [],
+    "content-hash": "8e70b0d5e82b59672173fcf523519c46",
+    "packages": [
+        {
+            "name": "fmihel/php-lib",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fmihel/php-lib.git",
+                "reference": "9776341db68810ae9e17e8898c99f2b63b7ef979"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fmihel/php-lib/zipball/9776341db68810ae9e17e8898c99f2b63b7ef979",
+                "reference": "9776341db68810ae9e17e8898c99f2b63b7ef979",
+                "shasum": ""
+            },
+            "require-dev": {
+                "fmihel/console-log": "*",
+                "phpunit/phpunit": "8.5.23"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "fmihel\\lib\\": "source"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "fmihel",
+                    "email": "fmihel76@gmail.com"
+                }
+            ],
+            "description": "php,lib,library",
+            "support": {
+                "issues": "https://github.com/fmihel/php-lib/issues",
+                "source": "https://github.com/fmihel/php-lib/tree/v5.0.0"
+            },
+            "time": "2024-01-11T13:20:19+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",

@@ -22,5 +22,8 @@
         "test": "phpunit --bootstrap vendor/autoload.php tests",
         "testdox": "phpunit --testdox tests"
 
+    },
+    "require": {
+        "fmihel/php-lib": "^5.0"
     }
 }
