@@ -76,4 +76,31 @@ Stat::stop($timer);
 
 
 console::line();
+$q = 'select * from USER where ID_DEALER = 21039';
+
+$timer = 'asis ';
+Stat::start($timer);
+$value = Base::rows($q,'deco','utf8');
+console::log(count($value));
+Stat::stop($timer);
+//---------------------------------------------------------
+$timer = 'wrap ';
+Stat::start($timer);
+$value = Cache::get('simple-3',[21039],function() use($q){
+    return Base::rows($q,'deco','utf8');
+});
+console::log(count($value));
+Stat::stop($timer);
+//---------------------------------------------------------
+$timer = 'cache';
+Stat::start($timer);
+$value = Cache::get('simple-3',[21039],function() use($q){
+    return Base::rows($q,'deco','utf8');
+});
+console::log(count($value));
+Stat::stop($timer);
+//---------------------------------------------------------
+
+
+console::line();
 
