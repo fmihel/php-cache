@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e70b0d5e82b59672173fcf523519c46",
+    "content-hash": "a97b70633e30bb7738a4141258d6ed8f",
     "packages": [
         {
             "name": "fmihel/php-lib",
@@ -158,6 +158,88 @@
                 "source": "https://github.com/fmihel/console-log/tree/v1.6.0"
             },
             "time": "2023-12-25T06:31:00+00:00"
+        },
+        {
+            "name": "fmihel/php-base",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fmihel/php-base.git",
+                "reference": "b6ea80459cab8d3a0fd5e35306033e962214c8bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fmihel/php-base/zipball/b6ea80459cab8d3a0fd5e35306033e962214c8bb",
+                "reference": "b6ea80459cab8d3a0fd5e35306033e962214c8bb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "fmihel/console-log": "^1.1",
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "fmihel\\base\\": "source"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "fmihel",
+                    "email": "fmihel76@gmail.com"
+                }
+            ],
+            "description": "php base wrapper",
+            "support": {
+                "issues": "https://github.com/fmihel/php-base/issues",
+                "source": "https://github.com/fmihel/php-base/tree/v1.2.2"
+            },
+            "time": "2023-05-18T07:48:44+00:00"
+        },
+        {
+            "name": "fmihel/php-config",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fmihel/php-config.git",
+                "reference": "e128bfa62d735b27c7185cb35a002226e6472a9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fmihel/php-config/zipball/e128bfa62d735b27c7185cb35a002226e6472a9b",
+                "reference": "e128bfa62d735b27c7185cb35a002226e6472a9b",
+                "shasum": ""
+            },
+            "require-dev": {
+                "fmihel/console-log": "*",
+                "phpunit/phpunit": "8.5.23"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "fmihel\\config\\": "source"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "fmihel",
+                    "email": "fmihel76@gmail.com"
+                }
+            ],
+            "description": "php config loader",
+            "support": {
+                "issues": "https://github.com/fmihel/php-config/issues",
+                "source": "https://github.com/fmihel/php-config/tree/v0.1.2"
+            },
+            "time": "2023-09-03T10:59:24+00:00"
         },
         {
             "name": "myclabs/deep-copy",

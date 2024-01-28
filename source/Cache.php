@@ -56,7 +56,8 @@ class Cache
       self::$driver->clear($key);
     }
 
-    public static function setDriver(iCacheDriver $driver){
+    public static function setDriver(iCacheDriver $driver)
+    {
         self::$driver = $driver;
     }
 

@@ -6,8 +6,8 @@ use fmihel\cache\Cache;
 use fmihel\console;
 use fmihel\cache\drivers\FileCacheDriver;
 
-require_once __DIR__.'/funcs.php';
-require_once __DIR__.'/../source/drivers/FileCacheDriver.php';
+require_once __DIR__.'/../funcs.php';
+require_once __DIR__.'/../../source/drivers/FileCacheDriver.php';
 
 
 final class CacheTest extends TestCase{
@@ -21,10 +21,10 @@ final class CacheTest extends TestCase{
     public function test_get(){
         
         // Cache::setDriver(new FileCacheDriver('~/work/fmihel/php-cache'));
+        Cache::setDriver(new FileCacheDriver(__DIR__.'/../cache'));
 
-        Cache::setDriver(new FileCacheDriver('/home/mike/work/fmihel/php-cache/'));
-        $expect = 125000000;
-        $count = 500;        
+        $expect = 27000000;
+        $count = 300;        
         \start('asis');
         $result = \heavy1($count);
         \stop('asis');
@@ -71,7 +71,29 @@ final class CacheTest extends TestCase{
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
 
+        console::line();
 
+        $expect = 125;
+        $count = 5;        
+        \start('asis');
+        $result = \heavy1($count);
+        \stop('asis');
+        self::assertEquals($expect,$result);
+        //-----------------------------------------------------
+        \start('wrap');
+        $result = Cache::get('heavy1',[$count],function() use ($count){
+            return \heavy1($count);
+        });
+        \stop('wrap');
+        self::assertEquals($expect,$result);
+        //-----------------------------------------------------
+        \start('cach');
+        $result = Cache::get('heavy1',[$count],function() use ($count){
+            return \heavy1($count);
+        });
+        \stop('cach');
+        self::assertEquals($expect,$result);
+        //-----------------------------------------------------
 
     }
     

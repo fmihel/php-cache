@@ -4,7 +4,9 @@
     "type": "library",
     "require-dev": {
         "fmihel/console-log": "^1.4",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "fmihel/php-config": "^0.1.2",
+        "fmihel/php-base": "^1.2"
     },
     "license": "MIT",
     "autoload": {

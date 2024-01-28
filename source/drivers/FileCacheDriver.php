@@ -5,6 +5,7 @@ require_once __DIR__.'/SimpleCacheDriver.php';
 
 use fmihel\lib\Dir;
 use fmihel\lib\Arr;
+use fmihel\console;
 
 class FileCacheDriver extends SimpleCacheDriver{
     
@@ -52,33 +53,36 @@ class FileCacheDriver extends SimpleCacheDriver{
 
     }
 
-    private function asPhp($data):string{
+    public function asPhp($data):string{
         
         $type = gettype($data);
-        if ($type = 'string'){
+        
+        if ($type === 'boolean'){
+            return $data? "true" : "false";
+        };
+
+        if ($type === 'string'){
             return "'$data'";
         };
-        if ($type = 'double' || $type = 'integer'){
+        if ($type === 'double' || $type === 'integer'){
             return "$data";
         };
-        if ($type = 'boolean'){
-            return $data?"true":"false";
-        };
+       
 
 
-        if ($type = 'array'){
+        if ($type === 'array'){
             if (Arr::is_assoc($data)){
                 $out = '';
                 foreach($data as $name=>$value){
-                    $out.=($out?',':'')."'$name'=>".$this->asPhp($value);
+                    $out.=($out?',':'') . "'$name'=>" . $this->asPhp($value);
                 }
                 return '['.$out.']';
             }else{
                 $out='';
                 for($i = 0;$i<count($data);$i++){
-                    $out.=($out?',':'').$this->asPhp($data[$i]);
+                    $out.= ($out?',':'') . $this->asPhp($data[$i]);
                 };
-                return $out;
+                return '['.$out.']';
             }
         };
 
