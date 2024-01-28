@@ -67,6 +67,9 @@ class FileCacheDriver extends SimpleCacheDriver{
         if ($type === 'double' || $type === 'integer'){
             return "$data";
         };
+        if ($type === 'NULL'){
+            return "NULL";
+        };
        
 
 
