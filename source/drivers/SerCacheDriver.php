@@ -12,9 +12,9 @@ class SerCacheDriver implements iCacheDriver
     private $cache = [];
     private $path = '';
 
-    public function __construct(string $path)
+    public function __construct(string $path = '')
     {
-        $this->path = $path ? $path : $_SERVER['PWD'] . '\cache';
+        $this->path = $path === '' ? Dir::pathinfo($_SERVER['SCRIPT_FILENAME'])['dirname'] . '/cache' : $path;
         if (!Dir::exist($path)) {
             mkdir($path);
         }
