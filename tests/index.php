@@ -11,6 +11,7 @@ use fmihel\cache\drivers\SerCacheDriver;
 use fmihel\config\Config;
 use fmihel\console;
 
+echo '<body style="color:lime;background:black">';
 console::line();
 
 foreach (Config::get('base') as $base) {
@@ -24,6 +25,7 @@ include __DIR__ . '/file.php';
 
 console::line();
 console::log('SerCacheDriver');
+
 Cache::setDriver(new SerCacheDriver(__DIR__ . '/cache'));
 include __DIR__ . '/file.php';
 

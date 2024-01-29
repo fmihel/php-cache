@@ -1,53 +1,76 @@
 <?php
 namespace fmihel\cache\drivers;
 
-require_once __DIR__.'/SimpleCacheDriver.php';
+require_once __DIR__ . '/../iCacheDriver.php';
 
+use fmihel\cache\iCacheDriver;
 use fmihel\lib\Dir;
-use fmihel\lib\Arr;
-use fmihel\console;
 
-class SerCacheDriver extends SimpleCacheDriver{
-    
-    private $path = '/home/mike/work/fmihel/php-cache/cache';
-    
-    function __construct(string $path){
-        $this->path = $path;
+class SerCacheDriver implements iCacheDriver
+{
+
+    private $cache = [];
+    private $path = '';
+
+    public function __construct(string $path)
+    {
+        $this->path = $path ? $path : $_SERVER['PWD'] . '\cache';
+        if (!Dir::exist($path)) {
+            mkdir($path);
+        }
 
     }
     public function get(string $key)
     {
-        if (parent::exists($key)){
-            return parent::get($key);
-        }else{
-            $filename = Dir::join($this->path,$key.'.ser');
-            $ser=file_get_contents($filename);
+
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
+        } else {
+            $filename = $this->filename($key);
+
+            $ser = file_get_contents($filename);
             $cache = unserialize($ser);
-            parent::set($key,$cache);
+
+            $this->cache[$key] = $cache;
             return $cache;
         }
-        
+
     }
-    public function set(string $key,$data){
-        
-        parent::set($key,$data);
-        $filename = Dir::join($this->path,$key.'.ser');
-        file_put_contents($filename,serialize($data));
+    public function set(string $key, $data)
+    {
+        $this->cache[$key] = $data;
+        file_put_contents($this->filename($key), serialize($data));
     }
 
-
-    public function exists(string $key):bool{
-        $exists = parent::exists($key);
-        if (!$exists){
-            $exists = file_exists(Dir::join($this->path,$key.'.ser'));
+    public function exists(string $key): bool
+    {
+        if (!($exists = isset($this->cache[$key]))) {
+            $exists = file_exists($this->filename($key));
         }
         return $exists;
-        // return isset($this->cache[$key]);
-    }
-
-    public function clear(string $key = ''){
 
     }
 
+    public function clear(string $key = '')
+    {
+        if ($key === '') {
+            $this->cache = [];
+            Dir::clear($this->path);
+        } else {
+
+            if (isset($this->cache[$key])) {
+                unset($this->cache[$key]);
+            }
+            $filename = $this->filename($key);
+            if (file_exists($filename)) {
+                unlink($filename);
+            }
+        }
+    }
+
+    private function filename(string $key): string
+    {
+        return Dir::join($this->path, $key . '.ser');
+    }
 
 }

@@ -1,8 +1,8 @@
 <?php
 namespace fmihel\cache;
 
-require_once __DIR__.'/iCacheDriver.php';
-require_once __DIR__.'/drivers/SimpleCacheDriver.php';
+require_once __DIR__ . '/iCacheDriver.php';
+require_once __DIR__ . '/drivers/SimpleCacheDriver.php';
 
 use fmihel\cache\drivers\SimpleCacheDriver;
 
@@ -22,22 +22,30 @@ class Cache
         }
 
         $data = $onCreate(...$params);
-        self::$driver->set($skey,$data);
-    
+        self::$driver->set($skey, $data);
 
         return $data;
 
     }
+    public static function clear()
+    {
+        self::$driver->clear();
+    }
 
-    public static function exists($key):bool
+    public static function setDriver(iCacheDriver $driver)
+    {
+        self::$driver = $driver;
+    }
+
+    private static function exists($key): bool
     {
         return self::$driver->exists($key);
     }
 
-    public static function key(...$keys): string
+    private static function key(...$keys): string
     {
         $out = '';
-        
+
         foreach ($keys as $key) {
             $type = gettype($key);
             $out .= $out ? '-' : '';
@@ -51,18 +59,6 @@ class Cache
         return md5($out);
     }
 
-    public static function clear(string $key = '')
-    {
-      self::$driver->clear($key);
-    }
-
-    public static function setDriver(iCacheDriver $driver)
-    {
-        self::$driver = $driver;
-    }
-
 }
 
 Cache::setDriver(new SimpleCacheDriver());
-
-?>
