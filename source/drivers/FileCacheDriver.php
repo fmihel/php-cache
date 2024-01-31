@@ -15,8 +15,8 @@ class FileCacheDriver implements iCacheDriver
     public function __construct(string $path = '')
     {
         $this->path = $path === '' ? Dir::pathinfo($_SERVER['SCRIPT_FILENAME'])['dirname'] . '/cache' : $path;
-        if (!Dir::exist($path)) {
-            mkdir($path);
+        if (!Dir::exist($this->path)) {
+            mkdir($this->path);
         }
 
     }
