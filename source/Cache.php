@@ -14,6 +14,7 @@ class Cache
 {
     private static $driver;
     private static $enable = true;
+    private static $now = time();
 
     public static function get(string $key, array $params, $onCreate, $lifetime = 0)
     {
@@ -24,13 +25,10 @@ class Cache
             if (self::exists($skey)) {
     
                 $result = self::$driver->get($skey);
-                if ($result[LIFETIME] > 0) {
-                    $now = time();
-                    $srok = strtotime('' . $result[LIFETIME] . ' hour', $result[CURRENT]);
-                    if ($now > $srok) {
-                        self::$driver->clear($skey);
-                        $result = false;
-                    }
+                
+                if (self::isOld($result)){
+                    self::$driver->clear($skey);
+                    $result = false;
                 }
     
                 if ($result) {
@@ -60,7 +58,11 @@ class Cache
     }
     public static function clearOld()
     {
-
+        self::$driver->each(function($key,$data){
+            if (self::isOld($data)){
+                self::$driver->clear($key);
+            }
+        });
     }
     public static function clear(string $key = '', array $params = [])
     {
@@ -107,6 +109,14 @@ class Cache
         }
         return self::$enable;
 
+    }
+
+    private static function isOld($data):bool{
+        if ($data[LIFETIME] > 0) {
+            $srok = strtotime('' . $data[LIFETIME] . ' hour', $data[CURRENT]);
+            return self::$now > $srok;
+        }
+        return false;
     }
 
 }
