@@ -13,34 +13,47 @@ const CURRENT = 'c';
 class Cache
 {
     private static $driver;
+    private static $enable = true;
 
     public static function get(string $key, array $params, $onCreate, $lifetime = 0)
     {
-        $skey = self::key($key, ...$params);
-        if (self::exists($skey)) {
 
-            $result = self::$driver->get($skey);
-            if ($result[LIFETIME] > 0) {
-                $now = time();
-                $srok = strtotime('' . $result[LIFETIME] . ' hour', $result[CURRENT]);
-                if ($now > $srok) {
-                    self::$driver->clear($skey);
-                    $result = false;
+        if (self::$enable) {
+
+            $skey = self::key($key, ...$params);
+            if (self::exists($skey)) {
+    
+                $result = self::$driver->get($skey);
+                if ($result[LIFETIME] > 0) {
+                    $now = time();
+                    $srok = strtotime('' . $result[LIFETIME] . ' hour', $result[CURRENT]);
+                    if ($now > $srok) {
+                        self::$driver->clear($skey);
+                        $result = false;
+                    }
                 }
+    
+                if ($result) {
+                    return $result[DATA];
+                }
+    
             }
+    
+            if (is_null($onCreate)) {
+                throw new \Exception('not define cache method for "' . $key . ' ' . print_r($params, true) . '"');
+            }
+    
+            $data = $onCreate(...$params);
+            self::$driver->set($skey, [CURRENT => time(), LIFETIME => $lifetime, DATA => $data]);
 
-            if ($result) {
-                return $result[DATA];
+        } else {
+
+            if (is_null($onCreate)) {
+                throw new \Exception('onCreate is null');
             }
+            $data = $onCreate(...$params);
 
         }
-
-        if (is_null($onCreate)) {
-            throw new \Exception('not define cache method for "' . $key . ' ' . print_r($params, true) . '"');
-        }
-
-        $data = $onCreate(...$params);
-        self::$driver->set($skey, [CURRENT => time(), LIFETIME => $lifetime, DATA => $data]);
 
         return $data;
 
@@ -84,6 +97,16 @@ class Cache
         }
 
         return md5($out);
+    }
+
+    public static function enable($set = null): bool
+    {
+
+        if (gettype($set) === 'boolean') {
+            self::$enable = $set;
+        }
+        return self::$enable;
+
     }
 
 }
