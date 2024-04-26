@@ -110,4 +110,16 @@ class FileCacheDriver implements iCacheDriver
     {
         return Dir::join($this->path, $key . '.php');
     }
+
+    public function each($callback)
+    {
+        $list = Dir::files($this->path, ['php'], false, true);
+        foreach ($list as $file) {
+            $key = trim(str_replace('.php', '', $file));
+            if ($callback($key, $this->get($key)) === false) {
+                break;
+            }
+        }
+    }
+
 }

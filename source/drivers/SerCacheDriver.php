@@ -48,7 +48,6 @@ class SerCacheDriver implements iCacheDriver
             $exists = file_exists($this->filename($key));
         }
         return $exists;
-
     }
 
     public function clear(string $key = '')
@@ -71,6 +70,17 @@ class SerCacheDriver implements iCacheDriver
     private function filename(string $key): string
     {
         return Dir::join($this->path, $key . '.ser');
+    }
+
+    public function each($callback)
+    {
+        $list = Dir::files($this->path, ['ser'], false, true);
+        foreach ($list as $file) {
+            $key = trim(str_replace('.ser', '', $file));
+            if ($callback($key, $this->get($key)) === false) {
+                break;
+            }
+        }
     }
 
 }
