@@ -9,20 +9,31 @@ use fmihel\cache\drivers\SimpleCacheDriver;
 class Cache
 {
     private static $driver;
+    private static $enable = true;
 
     public static function get(string $key, array $params, $onCreate = null)
     {
-        $skey = self::key($key, ...$params);
-        if (self::exists($skey)) {
-            return self::$driver->get($skey);
-        }
+        if (self::$enable) {
+            $skey = self::key($key, ...$params);
+            if (self::exists($skey)) {
+                return self::$driver->get($skey);
+            }
 
-        if (is_null($onCreate)) {
-            throw new \Exception('no cache  for "' . $skey . '"');
-        }
+            if (is_null($onCreate)) {
+                throw new \Exception('no cache  for "' . $skey . '"');
+            }
 
-        $data = $onCreate(...$params);
-        self::$driver->set($skey, $data);
+            $data = $onCreate(...$params);
+            self::$driver->set($skey, $data);
+
+        } else {
+
+            if (is_null($onCreate)) {
+                throw new \Exception('onCreate is null');
+            }
+            $data = $onCreate(...$params);
+
+        }
 
         return $data;
 
@@ -57,6 +68,16 @@ class Cache
         }
 
         return md5($out);
+    }
+
+    public static function enable($set = null): bool
+    {
+
+        if (gettype($set) === 'boolean') {
+            self::$enable = $set;
+        }
+        return self::$enable;
+
     }
 
 }
