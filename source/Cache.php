@@ -12,22 +12,27 @@ const CURRENT = 'c';
 
 class Cache
 {
-    private static $driver;
-    private static $enable = true;
-    private static $now = time();
+    private $driver = null;
+    private $enable = true;
+    private $now = time();
 
-    public static function get(string $key, array $params, $onCreate, $lifetime = 0)
+    public function __construct(iCacheDriver $driver)
+    {
+        $this->setDriver($driver);
+    }
+
+    public function get(string $key, array $params, $onCreate, $lifetime = 0)
     {
 
-        if (self::$enable) {
+        if ($this->enable) {
 
-            $skey = self::key($key, ...$params);
-            if (self::exists($skey)) {
+            $skey = $this->key($key, ...$params);
+            if ($this->exists($skey)) {
     
-                $result = self::$driver->get($skey);
+                $result = $this->driver->get($skey);
                 
-                if (self::isOld($result)){
-                    self::$driver->clear($skey);
+                if ($this->isOld($result)){
+                    $this->driver->clear($skey);
                     $result = false;
                 }
     
@@ -42,7 +47,7 @@ class Cache
             }
     
             $data = $onCreate(...$params);
-            self::$driver->set($skey, [CURRENT => time(), LIFETIME => $lifetime, DATA => $data]);
+            $this->driver->set($skey, [CURRENT => $this->now, LIFETIME => $lifetime, DATA => $data]);
 
         } else {
 
@@ -56,35 +61,35 @@ class Cache
         return $data;
 
     }
-    public static function clearOld()
+    public function clearOld()
     {
-        self::$driver->each(function($key,$data){
-            if (self::isOld($data)){
-                self::$driver->clear($key);
+        $this->driver->each(function($key,$data){
+            if ($this->isOld($data)){
+                $this->driver->clear($key);
             }
         });
     }
-    public static function clear(string $key = '', array $params = [])
+    public function clear(string $key = '', array $params = [])
     {
         if ($key) {
-            $skey = self::key($key, ...$params);
-            self::$driver->clear($skey);
+            $skey = $this->key($key, ...$params);
+            $this->driver->clear($skey);
         } else {
-            self::$driver->clear();
+            $this->driver->clear();
         }
     }
 
-    public static function setDriver(iCacheDriver $driver)
+    public function setDriver(iCacheDriver $driver)
     {
-        self::$driver = $driver;
+        $this->driver = $driver;
     }
 
-    private static function exists($key): bool
+    private function exists($key): bool
     {
-        return self::$driver->exists($key);
+        return $this->driver->exists($key);
     }
 
-    private static function key(...$keys): string
+    private function key(...$keys): string
     {
         $out = '';
 
@@ -101,24 +106,23 @@ class Cache
         return md5($out);
     }
 
-    public static function enable($set = null): bool
+    public function enable($set = null): bool
     {
 
         if (gettype($set) === 'boolean') {
-            self::$enable = $set;
+            $this->enable = $set;
         }
-        return self::$enable;
+        return $this->enable;
 
     }
 
-    private static function isOld($data):bool{
+    private function isOld($data):bool{
         if ($data[LIFETIME] > 0) {
             $srok = strtotime('' . $data[LIFETIME] . ' hour', $data[CURRENT]);
-            return self::$now > $srok;
+            return $this->now > $srok;
         }
         return false;
     }
 
 }
 
-Cache::setDriver(new SimpleCacheDriver());

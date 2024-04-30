@@ -29,7 +29,8 @@ class MyClass{
     }
 
     static function cached_strong($count1 = 10000,$count2 = 10000){
-        return Cache::get(KEY_1,funct_get_args(),function() use($count1,$count2){
+        global $cache;
+        return $cache->get(KEY_1,func_get_args(),function() use($count1,$count2){
             
             return self::strong($count1,$count2);
 
@@ -38,7 +39,7 @@ class MyClass{
 };
 
 
-Cache::setDriver(new FileCacheDriver(/*path*/));// default story cache to $_SERVER['PWD'].'/cache';
+$cache = new Cache(new FileCacheDriver(/*path*/));// default story cache to $_SERVER['PWD'].'/cache';
 
 $get = MyClass::cached_strong(1000000,100000);
 
@@ -48,9 +49,10 @@ $get = MyClass::cached_strong(1000000,100000);
 ## class Cache
 |name|params|note|
 |---|---|---|
-|::get(string $key,array $params,$callback):any|$key - unique key<br>$params - array of input params <br> $callback - wrap function for caching method | caching function result|
-|::clear()||clear cache|
-|::setDriverf(iCacheDriver $driver)| $driver - cache engine driver, implements `iCacheDriver` interface|set cache driver,<br> exists `SimpleCacheDriver`,`FileCacheDriver`,`SerCacheDriver`|
-
+|get(string $key,array $params,$callback,$lifetime):any|$key - unique key<br>$params - array of input params <br> $callback - wrap function for caching method<br>$lifetime - period in hours | caching function result |
+|clear()||clear cache|
+|setDriver(iCacheDriver $driver)| $driver - cache engine driver, implements `iCacheDriver` interface|set cache driver,<br> exists `SimpleCacheDriver`,`FileCacheDriver`,`SerCacheDriver`|
+|enable(bool=null)|bool - if boolean set | enable/disable caching, or return curent set if bool===null |
+|clearOld()||removes outdated caches|
 
 
