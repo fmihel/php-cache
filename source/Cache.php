@@ -14,10 +14,11 @@ class Cache
 {
     private $driver = null;
     private $enable = true;
-    private $now = time();
+    private $now = null;
 
     public function __construct(iCacheDriver $driver)
     {
+        $this->now = time();
         $this->setDriver($driver);
     }
 

@@ -48,7 +48,7 @@ final class FileCacheDriverTest extends TestCase{
         //-----------------------------------------------------
         
         $result = $fd->asPhp(['a'=>10,'b'=>'s','aa'=>[10,20,'m'=>'a']]);
-        $expect = "['a'=>10,'b'=>'s','aa'=>[10,20,'m'=>'a']]";
+        $expect = "['a'=>10,'b'=>'s','aa'=>['0'=>10,'1'=>20,'m'=>'a']]";
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
     }

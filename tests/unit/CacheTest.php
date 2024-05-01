@@ -12,16 +12,15 @@ require_once __DIR__.'/../../source/drivers/FileCacheDriver.php';
 
 final class CacheTest extends TestCase{
     
-    
+    static $cache;
+
     public static function setUpBeforeClass(): void
     {
-        //self::$cache = new Cache();
+        self::$cache = new Cache(new FileCacheDriver(__DIR__.'/../cache'));
     }
 
     public function test_get(){
         
-        // Cache::setDriver(new FileCacheDriver('~/work/fmihel/php-cache'));
-        Cache::setDriver(new FileCacheDriver(__DIR__.'/../cache'));
 
         $expect = 27000000;
         $count = 300;        
@@ -31,14 +30,14 @@ final class CacheTest extends TestCase{
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
         \start('wrap');
-        $result = Cache::get('heavy1',[$count],function() use ($count){
+        $result = self::$cache->get('heavy1',[$count],function() use ($count){
             return \heavy1($count);
         });
         \stop('wrap');
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
         \start('cach');
-        $result = Cache::get('heavy1',[$count],function() use ($count){
+        $result = self::$cache->get('heavy1',[$count],function() use ($count){
             return \heavy1($count);
         });
         \stop('cach');
@@ -57,14 +56,14 @@ final class CacheTest extends TestCase{
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
         \start('wrap');
-        $result = Cache::get('heavy1',[$count],function() use ($count){
+        $result =  self::$cache->get('heavy1',[$count],function() use ($count){
             return \heavy1($count);
         });
         \stop('wrap');
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
         \start('cach');
-        $result = Cache::get('heavy1',[$count],function() use ($count){
+        $result =  self::$cache->get('heavy1',[$count],function() use ($count){
             return \heavy1($count);
         });
         \stop('cach');
@@ -81,14 +80,14 @@ final class CacheTest extends TestCase{
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
         \start('wrap');
-        $result = Cache::get('heavy1',[$count],function() use ($count){
+        $result =  self::$cache->get('heavy1',[$count],function() use ($count){
             return \heavy1($count);
         });
         \stop('wrap');
         self::assertEquals($expect,$result);
         //-----------------------------------------------------
         \start('cach');
-        $result = Cache::get('heavy1',[$count],function() use ($count){
+        $result =  self::$cache->get('heavy1',[$count],function() use ($count){
             return \heavy1($count);
         });
         \stop('cach');
