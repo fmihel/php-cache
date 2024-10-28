@@ -26,6 +26,6 @@
 
     },
     "require": {
-        "fmihel/php-lib": "^5.0"
+        "fmihel/php-lib": "^6.0"
     }
 }
